@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Details</title>
+    <style>
+        /* Reset default margin and padding for better layout */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header and Navigation */
+        #nav {
+            background-color: rgb(7, 61, 112);
+            color: gray;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .home > a,
+        .nav-opt > a {
+            text-decoration: none;
+            color: rgb(219, 216, 216);
+            margin: 0 20px;
+            font-weight: bold;
+        }
+
+        /* Page Title */
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        /* Player Card */
+        .player-card {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 0px 8px black;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .player-photo {
+            max-width: 570px;
+            height: 320px;
+            border: 2px solid rgb(49, 48, 48);
+            border-radius: 5%;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
+        /* Player Info */
+        h2 {
+            font-size: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Player Status */
+        .status-playing {
+            color: green;
+        }
+        .status-bench {
+            color: red;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="nav">
+        <div class="home">
+            <a href="Index.html">Home</a>
+        </div>
+        <div class="nav-opt">
+            <a href="">Add Player</a>
+            <a href="">Add Team</a>
+        </div>
+    </div>
+    <h1>Player Details</h1>
+
+    <div class="player-card" id="playerDetails">
+        <!-- Player details will be displayed here -->
+    </div>
+
+    <script>
+        function getPlayerDetails() {
+            // Retrieve the selected player from local storage
+            const selectedPlayer = JSON.parse(localStorage.getItem('selectedPlayer'));
+
+            if (selectedPlayer) {
+                const playerDetails = document.getElementById("playerDetails");
+                playerDetails.innerHTML = `
+                    <h2>Player Name: ${selectedPlayer.name}</h2>
+                    <img class="player-photo" src="${selectedPlayer.photo}" alt="${selectedPlayer.name}">
+                    <h3>Team: ${selectedPlayer.team}</h3>
+                    <h3>Price: ${selectedPlayer.price}</h3>
+                    <h3>Status: <span class="${selectedPlayer.isPlaying ? 'status-playing' : 'status-bench'}">${selectedPlayer.isPlaying ? "Playing" : "On-bench"}</span></h3>
+                    <h3>Role: ${selectedPlayer.role}</h3>
+                `;
+            } else {
+                // Handle missing or invalid player data in local storage
+                const playerDetails = document.getElementById("playerDetails");
+                playerDetails.innerHTML = "<p>Player details not found.</p>";
+            }
+        }
+
+        // Initial page load
+        getPlayerDetails();
+    </script>
+</body>
+</html>

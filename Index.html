@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Teams</title>
+    <style>
+        /* Reset default margin and padding for better layout */
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Header and Navigation */
+        #nav {
+            background-color: rgb(7, 61, 112);
+            color: gray;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .home > a,
+        .nav-opt > a {
+            text-decoration: none;
+            color: rgb(219, 216, 216);
+            margin: 0 20px;
+            font-weight: bold;
+        }
+
+        /* Page Title */
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        /* Search Bar */
+        .search {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        #teamSearch {
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 5px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: rgb(57, 91, 57);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Team Cards */
+        #teamGrid {
+            display: grid;
+            grid-template-columns: repeat(4,1fr);
+            gap: 20px;
+            justify-items: center;
+            @media screen and (max-width: 480px) {
+        grid-template-columns: 1fr; /* One column for mobile phones */
+    }
+}
+        
+
+        .team-card {
+            background-color: rgb(214, 214, 213);
+            border-radius: 5px;
+            padding: 20px;
+            width: 280px;
+            box-shadow: 0 0 5px black;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .img {
+            width: 100%;
+            max-height: 150px;
+            border-radius: 5px;
+        }
+
+        .inner-heading {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        /* Player Cards */
+        #playerGrid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .player-card {
+            background-color: rgb(214, 214, 213);
+            border-radius: 5px;
+            padding: 20px;
+            width: 280px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            margin: 10px;
+        }
+        .heading{
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        /* Adjust styles as needed */
+    </style>
+</head>
+
+<body >
+    <div id="nav">
+        <div class="home">
+            <a href="Index.html">Home</a>
+        </div>
+        <div class="nav-opt">
+            <a href="">Add Team</a>
+            <a href="">Add Player</a>
+        </div>
+    </div>
+
+    <h1 class="heading">Cricket Teams</h1>
+
+    <!-- Search Bar -->
+    <div class="search">
+        <input type="text" id="teamSearch" placeholder="Enter Team eg.(Mumbai)">
+        <button class="btn" onclick="searchTeam()">Search</button>
+    </div>
+
+    <!-- Player Grid -->
+    <div id="playerGrid">
+        <!-- Players will be displayed here -->
+    </div>
+
+    <!-- Team Grid -->
+    <div id="teamGrid">
+        <!-- Teams will be displayed here -->
+    </div>
+
+
+    <script>
+
+
+        // Sample team data (you can retrieve from local storage)
+        // let team = JSON.parse(localStorage.getItem('teamsData')) 
+        
+        let teams =    [
+            { name: "Mumbai Indians", icon: 'https://i.pinimg.com/originals/28/09/a8/2809a841bb08827603ccac5c6aee8b33.png' },
+            { name: "Royal Challengers Bangalore", icon: "https://c.ndtvimg.com/2020-02/1r5vdst_rcb_625x300_14_February_20.jpg" },
+            { name: "Kolkata Knight Riders", icon: "https://logowik.com/content/uploads/images/kolkata-knight-riders6292.jpg" },
+            { name: "Chennai Super kings", icon: "https://i.pinimg.com/originals/70/52/1b/70521baac89be4d4cb2f223bbf67c974.png" },
+            { name: "Rajasthan Royals", icon: "https://upload.wikimedia.org/wikipedia/en/thumb/6/60/Rajasthan_Royals_Logo.svg/640px-Rajasthan_Royals_Logo.svg.png" },
+            { name: "Delhi Capitals", icon: "https://www.delhicapitals.in/static-assets/images/cssimages/logo.png" },
+            { name: "Lucknow Super Giants", icon: "https://static.toiimg.com/thumb/msid-89248103,width-400,resizemode-4/89248103.jpg" },
+            { name: "Punjab Kings", icon: "https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Punjab_Kings_Logo.svg/1200px-Punjab_Kings_Logo.svg.png" },
+        ];
+        
+        // Function to generate team cards
+        function generateTeamCards() {
+            const teamGrid = document.getElementById("teamGrid");
+            teamGrid.innerHTML = '';
+            
+            teams.forEach((team, index) => {
+                const teamCard = document.createElement("div");
+                teamCard.className = "team-card";
+                teamCard.innerHTML = `
+                <h3 class='inner-heading'>${team.name}</h3>
+                <img class='img' src="${team.icon}" alt="${team.name}" width="100" >
+                `;
+                teamCard.addEventListener("click", () => {
+                    // Store the selected team in local storage
+                    localStorage.setItem('selectedTeam', JSON.stringify(team));
+                    // Redirect to team details page
+                    window.location.href = `team-details.html?team=${team.name}`;
+                });
+                teamGrid.appendChild(teamCard);
+            });
+        }
+        
+        
+        function generatePlayerCards(players) {
+            const playerGrid = document.getElementById("playerGrid");
+            playerGrid.innerHTML = '';
+            
+            players.forEach((player, index) => {
+                const playerCard = document.createElement("div");
+                playerCard.className = "player-card";
+                playerCard.innerHTML = `
+                <h3 class='inner-heading'>${player.name}</h3>
+                <img class='img' src="${player.photo}" alt="${player.name}" width="100">
+                <!-- Add more player details here -->
+                `;
+                playerGrid.appendChild(playerCard);
+            });
+        }
+        
+        // Function to search for a team
+        // Function to search for a team
+        function  searchTeam() {
+            
+            let teamsData = JSON.parse(localStorage.getItem('teamsData'));
+            console.log(teamsData);
+            const searchInput = document.getElementById("teamSearch");
+            const searchTerm = searchInput.value.trim().toUpperCase(); // Convert search term to uppercase
+
+            if (searchTerm === "") {
+                // If search input is empty, show all players from all teams
+                const allPlayers = Object.values(teamsData).map(team => team.players).flat();
+                generatePlayerCards(allPlayers);
+            } else {
+                const matchingPlayers = [];
+
+                // Search for players in each team
+                for (const teamName in teamsData) {
+                    const team = teamsData[teamName];
+                    if (teamName.toUpperCase().includes(searchTerm)) {
+                        matchingPlayers.push(...team.players);
+                    }
+                }
+
+                if (matchingPlayers.length === 0) {
+                    // Handle the case where no players match the search term
+                    const playerGrid = document.getElementById("playerGrid");
+                    playerGrid.innerHTML = "<p id='playerGrid'>No players found.</p>";
+                } else {
+                    generatePlayerCards(matchingPlayers);
+                }
+            }
+        }
+
+
+
+
+        // Initial page load
+        generateTeamCards();
+
+    </script>
+</body>
+
+</html>
